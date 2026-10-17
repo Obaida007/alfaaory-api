@@ -8,6 +8,7 @@ use App\Models\RechargeCode;
 use App\Models\User;
 use App\Services\GameProviders\FakeGameProvider;
 use App\Services\GameProviders\GameProvider;
+use App\Support\ApiEnvelopeDocumentTransformer;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
@@ -16,6 +17,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -42,6 +44,18 @@ class AppServiceProvider extends ServiceProvider
             'deposit' => Deposit::class,
             'recharge_code' => RechargeCode::class,
             'admin_adjustment' => User::class,
+        ]);
+
+        // Paginated API resources return { data, meta } — no `links` block.
+        ResourceCollection::macro('paginationInformation', fn ($request, array $paginated, array $default) => [
+            'meta' => [
+                'current_page' => $paginated['current_page'],
+                'last_page' => $paginated['last_page'],
+                'per_page' => $paginated['per_page'],
+                'total' => $paginated['total'],
+                'from' => $paginated['from'],
+                'to' => $paginated['to'],
+            ],
         ]);
 
         $this->configureRateLimiting();
@@ -71,7 +85,8 @@ class AppServiceProvider extends ServiceProvider
         Scramble::configure()
             ->withDocumentTransformers(function (OpenApi $openApi) {
                 $openApi->secure(SecurityScheme::http('bearer'));
-            });
+            })
+            ->withDocumentTransformers(new ApiEnvelopeDocumentTransformer);
 
         Gate::define('viewApiDocs', fn (?User $user = null) => config('store.api_docs_public') || (bool) $user?->hasAnyRole(User::ADMIN_ROLES));
     }
