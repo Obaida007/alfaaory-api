@@ -92,8 +92,7 @@ class WalletService
         ?string $description,
         ?User $createdBy,
         ?string $sourceType = null,
-    ): WalletTransaction
-    {
+    ): WalletTransaction {
         $amount = Money::round($amount);
 
         if (! Money::isPositive($amount)) {

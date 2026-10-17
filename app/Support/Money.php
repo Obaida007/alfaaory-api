@@ -21,7 +21,7 @@ final class Money
 
     public static function round(string|int|float|BigDecimal|null $value): string
     {
-        return (string) self::of($value)->toScale(2, RoundingMode::HALF_UP);
+        return (string) self::of($value)->toScale(2, RoundingMode::HalfUp);
     }
 
     public static function add(mixed $a, mixed $b): string
@@ -42,12 +42,12 @@ final class Money
     /** $a * $percent / 100 */
     public static function percent(mixed $a, mixed $percent): string
     {
-        return self::round(self::of($a)->multipliedBy(self::of($percent))->dividedBy(100, 6, RoundingMode::HALF_UP));
+        return self::round(self::of($a)->multipliedBy(self::of($percent))->dividedBy(100, 6, RoundingMode::HalfUp));
     }
 
     public static function div(mixed $a, mixed $b): string
     {
-        return self::round(self::of($a)->dividedBy(self::of($b), 6, RoundingMode::HALF_UP));
+        return self::round(self::of($a)->dividedBy(self::of($b), 6, RoundingMode::HalfUp));
     }
 
     public static function cmp(mixed $a, mixed $b): int
