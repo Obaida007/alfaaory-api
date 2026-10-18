@@ -5,7 +5,7 @@
 | المكوّن | التقنية |
 |---|---|
 | الإطار | Laravel 13 · PHP 8.3+ |
-| قاعدة البيانات | MySQL 8 أو PostgreSQL 14+ |
+| قاعدة البيانات | MySQL 8 (InnoDB، utf8mb4) |
 | توثيق الـ API | Laravel Sanctum (Bearer Token) |
 | لوحة التحكم | Filament 5 على `/admin` (عربي، RTL) |
 | صلاحيات المشرفين | spatie/laravel-permission |
@@ -26,8 +26,8 @@ php artisan key:generate
 عدّل `.env`:
 
 ```dotenv
-DB_CONNECTION=mysql          # أو pgsql
-DB_DATABASE=alfaore
+DB_CONNECTION=mysql
+DB_DATABASE=alfaore          # أنشئها: CREATE DATABASE alfaore CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 DB_USERNAME=root
 DB_PASSWORD=
 
@@ -253,14 +253,10 @@ Idempotency-Key: 3f0b6c8e-6c5e-4d0e-9a51-9b8f1c2d7e10
 
 ## الاختبارات
 
-اختبارات التزامن تحتاج أقفال صفوف حقيقية، لذلك تعمل الاختبارات على قاعدة بيانات منفصلة اسمها `alfaore_test`، بنوع الاتصال نفسه الموجود في `.env`:
+اختبارات التزامن تحتاج أقفال صفوف حقيقية (InnoDB)، لذلك تعمل الاختبارات على قاعدة MySQL منفصلة اسمها `alfaore_test`، ببيانات الاتصال نفسها الموجودة في `.env`:
 
 ```bash
-# MySQL
-mysql -e "CREATE DATABASE alfaore_test"
-# أو PostgreSQL
-createdb alfaore_test
-
+mysql -u root -p -e "CREATE DATABASE alfaore_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
 php artisan test --compact
 ```
 

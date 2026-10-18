@@ -20,26 +20,27 @@ jobs:
 
     name: PHP ${{ matrix.php }}
 
-    # The concurrency tests need real row locks, so the suite runs against PostgreSQL.
+    # The concurrency tests need real row locks, so the suite runs against MySQL (InnoDB).
     services:
-      postgres:
-        image: postgres:16
+      mysql:
+        image: mysql:8.0
         env:
-          POSTGRES_USER: alfaore
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: alfaore_test
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: alfaore_test
+          MYSQL_USER: alfaore
+          MYSQL_PASSWORD: secret
         ports:
-          - 5432:5432
+          - 3306:3306
         options: >-
-          --health-cmd "pg_isready -U alfaore -d alfaore_test"
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -psecret"
           --health-interval 5s
           --health-timeout 5s
-          --health-retries 10
+          --health-retries 20
 
     env:
-      DB_CONNECTION: pgsql
+      DB_CONNECTION: mysql
       DB_HOST: 127.0.0.1
-      DB_PORT: 5432
+      DB_PORT: 3306
       DB_USERNAME: alfaore
       DB_PASSWORD: secret
 
@@ -53,7 +54,7 @@ jobs:
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, intl, gd
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_mysql, intl, gd
           coverage: none
 
       - name: Install Composer dependencies

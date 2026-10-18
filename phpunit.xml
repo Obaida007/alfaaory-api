@@ -26,7 +26,7 @@
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
-        <!-- Uses the DB_CONNECTION from .env (mysql/pgsql) against a separate test database:
+        <!-- Uses the MySQL connection from .env against a separate test database:
              real row locks are required by the concurrency tests. -->
         <env name="DB_DATABASE" value="alfaore_test"/>
         <env name="DB_URL" value=""/>
