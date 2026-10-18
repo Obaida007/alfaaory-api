@@ -3,11 +3,8 @@ name: Tests
 on:
   push:
     branches:
-      - master
-      - '*.x'
+      - main
   pull_request:
-  schedule:
-    - cron: '0 0 * * *'
 
 permissions:
   contents: read
@@ -19,9 +16,32 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.3, 8.4, 8.5]
+        php: [8.3, 8.4]
 
     name: PHP ${{ matrix.php }}
+
+    # The concurrency tests need real row locks, so the suite runs against PostgreSQL.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: alfaore
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: alfaore_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U alfaore"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USERNAME: alfaore
+      DB_PASSWORD: secret
 
     steps:
       - name: Checkout code
@@ -33,7 +53,7 @@ jobs:
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, intl, gd
           coverage: none
 
       - name: Install Composer dependencies
@@ -44,6 +64,9 @@ jobs:
 
       - name: Generate app key
         run: php artisan key:generate
+
+      - name: Check code style
+        run: vendor/bin/pint --test
 
       - name: Execute tests
         run: php artisan test
