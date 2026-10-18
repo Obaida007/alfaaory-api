@@ -26,6 +26,7 @@ class UnifiedJsonResponse
             $body = ['data' => $body];
         }
 
+        $response->setEncodingOptions($response->getEncodingOptions() | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $response->setData([
             'data' => $body['data'],
             'meta' => $body['meta'] ?? null,

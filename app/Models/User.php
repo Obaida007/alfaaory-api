@@ -25,6 +25,7 @@ use Spatie\Permission\Traits\HasRoles;
 #[Fillable([
     'first_name', 'last_name', 'username', 'email', 'phone', 'password', 'avatar',
     'google_id', 'telegram_chat_id', 'two_factor_enabled', 'is_banned', 'last_login_at',
+    'level_id', 'debit_balance', 'kyc_status',
 ])]
 #[Hidden(['password', 'remember_token', 'telegram_link_token'])]
 class User extends Authenticatable implements FilamentUser, HasName

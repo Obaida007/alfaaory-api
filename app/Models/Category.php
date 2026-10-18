@@ -55,6 +55,31 @@ class Category extends Model
         return $this->hasMany(Product::class)->orderBy('sort');
     }
 
+    /**
+     * Every category as id => "Section › Game › Type", built from one query (for admin selects).
+     *
+     * @return array<int, string>
+     */
+    public static function pathOptions(?int $exceptId = null): array
+    {
+        $all = static::query()->orderBy('sort')->get(['id', 'parent_id', 'name'])->keyBy('id');
+
+        return $all
+            ->reject(fn (Category $c) => $c->id === $exceptId)
+            ->mapWithKeys(function (Category $c) use ($all) {
+                $names = [$c->name];
+                $parent = $all->get($c->parent_id);
+                for ($depth = 0; $parent && $depth < 10; $depth++) {
+                    array_unshift($names, $parent->name);
+                    $parent = $all->get($parent->parent_id);
+                }
+
+                return [$c->id => implode(' › ', $names)];
+            })
+            ->sort()
+            ->all();
+    }
+
     public function scopeActive(Builder $query): void
     {
         $query->where('is_active', true);

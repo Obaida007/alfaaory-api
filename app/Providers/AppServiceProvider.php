@@ -64,7 +64,6 @@ class AppServiceProvider extends ServiceProvider
         ResetPassword::createUrlUsing(fn (User $user, string $token) => rtrim(config('store.frontend_url'), '/')
             .'/reset-password?token='.$token.'&email='.urlencode($user->email));
 
-        Gate::before(fn (User $user) => $user->hasRole('super_admin') ? true : null);
     }
 
     protected function configureRateLimiting(): void
