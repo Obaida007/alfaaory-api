@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'name', 'group', 'image', 'instructions', 'account_details', 'currency', 'exchange_rate',
+    'name', 'subtitle', 'group', 'image', 'instructions', 'account_details', 'currency', 'exchange_rate',
     'min_amount', 'max_amount', 'fee_percent', 'requires_kyc', 'is_auto', 'is_active', 'sort',
 ])]
 class PaymentMethod extends Model

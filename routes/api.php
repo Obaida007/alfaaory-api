@@ -21,6 +21,7 @@ Route::prefix('v1')->middleware('throttle:api')->name('api.v1.')->group(function
     Route::get('search', [CatalogController::class, 'search'])->name('search');
     Route::get('payment-methods', [InfoController::class, 'paymentMethods'])->name('payment-methods');
     Route::get('agents', [InfoController::class, 'agents'])->name('agents');
+    Route::get('levels', [InfoController::class, 'levels'])->name('levels');
     Route::get('pages/{page}', [InfoController::class, 'page'])->whereIn('page', ['about', 'privacy'])->name('pages');
     Route::get('settings/public', [InfoController::class, 'settings'])->name('settings');
 

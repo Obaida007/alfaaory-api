@@ -79,7 +79,7 @@ class OrderController extends Controller
 
         $orders = $request->applyDateRange($request->user()->orders()->getQuery())
             ->with('product')
-            ->when($request->validated('status'), fn (Builder $b, $status) => $b->where('status', $status))
+            ->when($request->validated('status'), fn (Builder $b, array $statuses) => $b->whereIn('status', $statuses))
             ->when($q, fn (Builder $b) => $b->where(fn (Builder $w) => $w
                 ->where('player_id', 'like', "%{$q}%")
                 ->orWhereHas('product', fn (Builder $p) => $p->whereLike('name', "%{$q}%"))

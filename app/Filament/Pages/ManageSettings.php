@@ -39,7 +39,7 @@ class ManageSettings extends Page
 
     /** @var array<int, string> */
     protected const KEYS = [
-        'site_name', 'admin_whatsapp', 'admin_email', 'facebook_url', 'instagram_url',
+        'site_name', 'admin_whatsapp', 'admin_email', 'whatsapp_group_url', 'whatsapp_channel_url', 'facebook_url', 'instagram_url',
         'telegram_url', 'tiktok_url', 'youtube_url', 'about_text', 'privacy_policy',
     ];
 
@@ -63,6 +63,8 @@ class ManageSettings extends Page
                     TextInput::make('site_name')->label('اسم المتجر')->required()->maxLength(100),
                     TextInput::make('admin_whatsapp')->label('واتساب الإدارة')->tel()->helperText('بالصيغة الدولية، مثل +963912345678'),
                     TextInput::make('admin_email')->label('بريد الإدارة')->email(),
+                    TextInput::make('whatsapp_group_url')->label('رابط مجموعة واتساب (مجتمع العروض)')->url(),
+                    TextInput::make('whatsapp_channel_url')->label('رابط قناة واتساب')->url(),
                 ]),
                 Section::make('روابط التواصل الاجتماعي')->columns(2)->collapsible()->schema([
                     TextInput::make('facebook_url')->label('فيسبوك')->url(),
@@ -73,7 +75,8 @@ class ManageSettings extends Page
                 ]),
                 Section::make('الصفحات')->schema([
                     Textarea::make('about_text')->label('نص «من نحن»')->rows(8),
-                    Textarea::make('privacy_policy')->label('سياسة الخصوصية')->rows(12),
+                    Textarea::make('privacy_policy')->label('سياسة الخصوصية')->rows(16)
+                        ->helperText('اكتب "## " في بداية السطر لعنوان قسم، و"- " لنقطة في قائمة.'),
                 ]),
             ]);
     }
