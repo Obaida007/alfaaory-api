@@ -64,7 +64,7 @@ class OrderController extends Controller
             $key,
         );
 
-        return (new OrderResource($order->load('product')))
+        return (new OrderResource($order->load('product.category')))
             ->additional(['message' => $created ? __('store.messages.order_created') : __('store.messages.order_replayed')])
             ->response()
             ->setStatusCode($created ? 201 : 200);
@@ -78,8 +78,8 @@ class OrderController extends Controller
         $q = $request->validated('q');
 
         $orders = $request->applyDateRange($request->user()->orders()->getQuery())
-            ->with('product')
-            ->when($request->validated('status'), fn (Builder $b, $status) => $b->where('status', $status))
+            ->with('product.category')
+            ->when($request->validated('status'), fn (Builder $b, array $statuses) => $b->whereIn('status', $statuses))
             ->when($q, fn (Builder $b) => $b->where(fn (Builder $w) => $w
                 ->where('player_id', 'like', "%{$q}%")
                 ->orWhereHas('product', fn (Builder $p) => $p->whereLike('name', "%{$q}%"))
@@ -97,6 +97,6 @@ class OrderController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id, 404);
 
-        return new OrderResource($order->load('product'));
+        return new OrderResource($order->load('product.category'));
     }
 }

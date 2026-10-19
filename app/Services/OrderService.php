@@ -78,7 +78,7 @@ class OrderService
                     'idempotency_key' => $idempotencyKey,
                 ]);
 
-                $this->wallet->debit($user, $total, $order, __('store.tx.order_purchase', ['id' => $order->id, 'product' => $product->name]));
+                $this->wallet->debit($user, $total, $order, __('store.tx.order_purchase', ['id' => $order->id, 'product' => $this->label($product)]));
 
                 return [$order, true];
             });
@@ -143,6 +143,14 @@ class OrderService
 
             return $locked;
         });
+    }
+
+    /**
+     * "PUBG GLOBAL AUTO 60 UC" wrapped in Unicode isolates so Latin names keep their order inside Arabic text.
+     */
+    protected function label(Product $product): string
+    {
+        return "\u{2068}".trim(($product->category?->name ?? '').' '.$product->name)."\u{2069}";
     }
 
     protected function lockOpen(Order $order): Order

@@ -16,6 +16,8 @@ class PaymentMethodResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            /** Short line under the name, e.g. "محفظة" or "أوتوماتيك". */
+            'subtitle' => $this->subtitle,
             'group' => $this->group,
             'image_url' => Media::url($this->image),
             'instructions' => $this->instructions,

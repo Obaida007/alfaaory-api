@@ -57,6 +57,20 @@ it('groups payment methods', function () {
         ->and($groups->firstWhere('group', 'crypto')['methods'])->toHaveCount(3);
 });
 
+it('lists the levels from the lowest threshold', function () {
+    $this->getJson('/api/v1/levels')
+        ->assertOk()
+        ->assertJsonCount(6, 'data')
+        ->assertJsonPath('data.0.name', 'البرونزي')
+        ->assertJsonPath('data.1.min_total_purchases', '500.00');
+});
+
+it('returns payment method subtitles', function () {
+    $crypto = collect($this->getJson('/api/v1/payment-methods')->json('data'))->firstWhere('group', 'crypto');
+
+    expect(collect($crypto['methods'])->firstWhere('name', 'USDT TRC20')['subtitle'])->toBe('أوتوماتيك');
+});
+
 it('serves agents, pages and public settings', function () {
     $this->getJson('/api/v1/agents')->assertOk()->assertJsonCount(3, 'data');
     $this->getJson('/api/v1/pages/about')->assertOk()->assertJsonPath('data.page', 'about');

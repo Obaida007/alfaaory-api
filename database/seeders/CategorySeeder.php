@@ -27,7 +27,9 @@ class CategorySeeder extends Seeder
     /** @var array<int, string> */
     protected array $games = [
         'PUBG MOBILE', 'FREE FIRE', 'JAWAKER', 'YALLA LUDO', '8Ball Pool', 'BLOOD STRIKE',
-        'DELTA FORCE', 'MOBILE LEGENDS', 'Genshin Impact', 'VALORANT', 'Call of Duty Mobile', 'Clash of Clans',
+        'DELTA FORCE', 'ARENA BREAKOUT', 'Where Winds Meet', 'weplay', 'Wuthering Waves', 'KNIVES OUT',
+        'STATE OF SURVIVAL', 'HONOR OF KINGS', 'HAY DAY', 'MOBILE LEGENDS', 'LORDS MOBILE', 'Genshin Impact',
+        'FC MOBILE', 'VALORANT', 'Call of Duty Mobile', 'Clash of Clans',
     ];
 
     /** @var array<int, string> */
@@ -57,6 +59,10 @@ class CategorySeeder extends Seeder
     {
         $pubg = Category::where('slug', 'pubg-mobile')->first();
         $auto = $this->category('PUBG GLOBAL AUTO', null, $pubg, 0, 'شحن شدات ببجي العالمية تلقائيًا عبر معرّف اللاعب.');
+
+        foreach (['PUBG GLOBAL MAN', 'PUBG GLOBAL CODES', 'PUBG TR', 'PUBG Memberships', 'PUBG New State'] as $i => $type) {
+            $this->category($type, null, $pubg, $i + 1);
+        }
 
         $packages = ['60' => '1.01', '325' => '5.09', '660' => '10.12', '1800' => '24.21', '3850' => '46.46', '8100' => '91.77'];
 
