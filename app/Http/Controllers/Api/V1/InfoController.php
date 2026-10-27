@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Enums\PaymentGroup;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AgentResource;
+use App\Http\Resources\LevelResource;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Agent;
+use App\Models\Level;
 use App\Models\PaymentMethod;
 use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
@@ -38,6 +40,18 @@ class InfoController extends Controller
             ->values();
 
         return response()->json(['data' => $groups]);
+    }
+
+    /**
+     * Levels
+     *
+     * All customer levels, from the lowest threshold up.
+     *
+     * @unauthenticated
+     */
+    public function levels(): AnonymousResourceCollection
+    {
+        return LevelResource::collection(Level::query()->orderBy('min_total_purchases')->get());
     }
 
     /**

@@ -109,6 +109,7 @@ npx openapi-typescript ./api.json -o types/api.ts
 - `GET /search?q=`
 - `GET /payment-methods`
 - `GET /agents`
+- `GET /levels`
 - `GET /pages/{about|privacy}`
 - `GET /settings/public`
 
@@ -134,7 +135,7 @@ npx openapi-typescript ./api.json -o types/api.ts
 - **الطلبات:**
   - `POST /products/{id}/check-name`
   - `POST /orders`: مع الترويسة **`Idempotency-Key`**.
-  - `GET /orders?status=&from=&to=&q=`
+  - `GET /orders?status=&from=&to=&q=`: ‏`status` يقبل أكثر من حالة مفصولة بفواصل، مثل `pending,processing`.
   - `GET /orders/{id}`
 - **المحفظة:**
   - `GET /wallet`

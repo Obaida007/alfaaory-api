@@ -49,6 +49,7 @@ class PaymentMethodResource extends Resource
             Section::make('البيانات الأساسية')->columns(2)->schema([
                 TextInput::make('name')->label('الاسم')->required()->maxLength(255),
                 Select::make('group')->label('المجموعة')->options(PaymentGroup::class)->required(),
+                TextInput::make('subtitle')->label('الوصف المختصر')->maxLength(100)->helperText('يظهر تحت الاسم، مثل: محفظة، حوالة، أوتوماتيك'),
                 FileUpload::make('image')->label('الصورة')->image()->disk('public')->directory('payment-methods')->columnSpanFull(),
                 Textarea::make('instructions')->label('التعليمات')->rows(4)->columnSpanFull(),
                 KeyValue::make('account_details')->label('بيانات الحساب')
@@ -78,7 +79,7 @@ class PaymentMethodResource extends Resource
             ->defaultSort('sort')
             ->columns([
                 ImageColumn::make('image')->label('')->disk('public')->circular(),
-                TextColumn::make('name')->label('الاسم')->searchable(),
+                TextColumn::make('name')->label('الاسم')->searchable()->description(fn (PaymentMethod $record) => $record->subtitle),
                 TextColumn::make('group')->label('المجموعة')->badge(),
                 TextColumn::make('currency')->label('العملة'),
                 TextColumn::make('exchange_rate')->label('سعر الصرف'),

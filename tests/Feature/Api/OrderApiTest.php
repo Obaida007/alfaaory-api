@@ -58,6 +58,8 @@ it('lists and filters only my orders', function () {
 
     $this->getJson('/api/v1/orders')->assertOk()->assertJsonCount(2, 'data')->assertJsonPath('meta.total', 2);
     $this->getJson('/api/v1/orders?status=completed')->assertJsonCount(1, 'data');
+    $this->getJson('/api/v1/orders?status=pending,processing')->assertJsonCount(1, 'data');
+    $this->getJson('/api/v1/orders?status=bogus')->assertUnprocessable();
     $this->getJson('/api/v1/orders?q=777888')->assertJsonCount(1, 'data');
     $this->getJson('/api/v1/orders?from='.now()->addDay()->toDateString())->assertJsonCount(0, 'data');
 });

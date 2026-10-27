@@ -11,8 +11,8 @@ class Setting extends Model
 {
     /** Keys exposed through GET /settings/public. */
     public const PUBLIC_KEYS = [
-        'site_name', 'admin_whatsapp', 'admin_email', 'facebook_url', 'instagram_url',
-        'telegram_url', 'tiktok_url', 'youtube_url',
+        'site_name', 'admin_whatsapp', 'admin_email', 'whatsapp_group_url', 'whatsapp_channel_url',
+        'facebook_url', 'instagram_url', 'telegram_url', 'tiktok_url', 'youtube_url',
     ];
 
     public const PAGE_KEYS = ['about' => 'about_text', 'privacy' => 'privacy_policy'];

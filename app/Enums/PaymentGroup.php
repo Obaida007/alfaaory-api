@@ -17,9 +17,9 @@ enum PaymentGroup: string implements HasColor, HasLabel
     {
         return match ($this) {
             self::Wallet => 'محافظ وحوالات',
-            self::Crypto => 'عملات رقمية',
-            self::Bank => 'بنوك وبطاقات',
-            self::AgencySalary => 'رواتب وكالات',
+            self::Crypto => 'العملات الرقمية',
+            self::Bank => 'البنوك والبطاقات',
+            self::AgencySalary => 'رواتب الوكالات',
             self::Code => 'أكواد شحن',
         };
     }
